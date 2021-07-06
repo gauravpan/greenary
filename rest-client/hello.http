@@ -1,0 +1,20 @@
+install rest client vs code extension to test apis in vs code.
+ 1. use '###' to separate requests
+ 2. have one line as divider to have body content
+ 
+
+###
+GET http://localhost:3000/api/auth/session HTTP/1.1
+Authorization: Bearer token4uu98u98u98u98
+
+{
+    "i am " : "JSON body"
+}
+
+###
+GET http://localhost:3000/api/auth/session HTTP/1.1
+Authorization: Bearer token4uu98u98u98u98
+
+{
+    "i am " : "JSON body"
+}

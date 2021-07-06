@@ -6,12 +6,12 @@ const BidSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, 'Please provide a title for this bid.'],
-      maxlength: [30, 'Name cannot be more than 30 characters'],
+      maxlength: [100, 'Name cannot be more than 10 characters'],
     },
     description: {
       type: String,
       required: false,
-      maxlength: [100, 'Description cannot be more than 60 characters'],
+      maxlength: [200, 'Description cannot be more than 200 characters'],
     },
     amount: {
       type: Number,

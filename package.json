@@ -22,13 +22,9 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.10.1",
-<<<<<<< HEAD
     "react-icons": "^4.2.0",
-    "react-query": "^3.18.1"
-=======
     "react-query": "^3.18.1",
     "zustand": "^3.5.5"
->>>>>>> aa108e2738d3eb09a569fc2160dcfbd8c8c21443
   },
   "license": "MIT",
   "devDependencies": {

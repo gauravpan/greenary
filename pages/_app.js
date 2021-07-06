@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Provider } from 'next-auth/client'
+import { Provider, useSession } from 'next-auth/client'
 import {
   ChakraProvider,
   extendTheme,
@@ -17,6 +17,8 @@ const queryClient = new QueryClient()
 function MyApp({ Component, pageProps }) {
   const title = Component.title || 'Green Market'
   const Layout = Component.Layout || MainLayout
+
+  const protectedRoute = Component.protectedRoute || 'YES'
 
   return (
     <>

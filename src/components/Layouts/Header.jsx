@@ -14,8 +14,10 @@ import {
   MenuGroup,
   MenuDivider,
 } from '@chakra-ui/react'
+import { signOut, useSession } from 'next-auth/client'
 
 export default function Header() {
+  const [session] = useSession()
   return (
     <Box>
       <Box bg="white">
@@ -33,7 +35,7 @@ export default function Header() {
                   <Avatar
                     name="Dan Abrahmov"
                     boxSize="8"
-                    src="https://bit.ly/dan-abramov"
+                    src={session?.user?.image}
                   />
                 </MenuButton>
                 <MenuList shadow="lg">
@@ -42,9 +44,8 @@ export default function Header() {
                     <MenuItem>Payments </MenuItem>
                   </MenuGroup>
                   <MenuDivider />
-                  <MenuGroup title="Help">
-                    <MenuItem>Docs</MenuItem>
-                    <MenuItem>FAQ</MenuItem>
+                  <MenuGroup>
+                    <MenuItem onClick={() => signOut()}>Log Out</MenuItem>
                   </MenuGroup>
                 </MenuList>
               </Menu>

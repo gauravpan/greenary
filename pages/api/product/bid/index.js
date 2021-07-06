@@ -22,9 +22,19 @@ export default async function handler(req, res) {
       break
     case 'POST':
       try {
-        Bid.create(req.body, (error, bid) => {
+        if (!req.body.userId) return res.send({ error: 'UserId missing' })
+        Bid.findOne({ userId: req.body.userId, productId: req.body.productId }).then((error, bid) => {
           if (error) return res.send({ error })
-          res.status(201).json({ success: true, data: bid })
+          if (bid) {
+            res
+              .status(201)
+              .json({ error: 'User have created bid already', bid: bid })
+          } else {
+            Bid.create(req.body, (error, bid) => {
+              if (error) return res.send({ error })
+              res.status(201).json({ success: true, data: bid })
+            })
+          }
         })
       } catch (error) {
         res.status(400).json({ message: 'Error Creating Bid ', error })
@@ -34,7 +44,7 @@ export default async function handler(req, res) {
       try {
         Bid.findOne(
           {
-            productId: req.body.productId,
+            id: req.body.id,
           },
           async (error, bid) => {
             if (error) return res.send({ error })

@@ -3,12 +3,14 @@ import { useRef } from 'react'
 
 import Header from './Header'
 import NavBar from './NavBar'
+import AddProductModal from '../Home/AddProductModal'
 
 export default function Layout({ children }) {
   const navRef = useRef(null)
 
   return (
     <Box>
+      <AddProductModal />
       <style jsx global>
         {`
           html {

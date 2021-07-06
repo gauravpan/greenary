@@ -3,18 +3,19 @@ import dbConnect from '../../../backend/utils/dbConnect'
 
 export default async function handler(req, res) {
   const { method } = req
+  const { productId } = req.query
 
   await dbConnect()
 
   switch (method) {
     case 'GET':
       try {
-        const products = await Product.find(
-          {}
+        const products = await Product.findById(
+          productId
         ) /* find all the data in our database */
         res.status(200).json({ success: true, data: products })
       } catch (error) {
-        res.status(400).json({ success: false })
+        res.status(400).json({ success: 'false', error: error.message })
       }
       break
     case 'POST':

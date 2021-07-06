@@ -1,57 +1,19 @@
-import {
-  Spacer,
-  HStack,
-  Heading,
-  Button,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Spacer, HStack, Heading, Button } from '@chakra-ui/react'
+
+import useProductModal from '../../store/add-product-modal-store'
 
 export default function AddProduct() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { setModalOpen } = useProductModal()
 
   return (
-    <HStack bg="white" p="4" shadow="lg" rounded="lg">
+    <HStack bg="white" p="4" shadow="sm" rounded="lg">
       <Heading size="md" pb="3" color="black">
         Add Product
       </Heading>
       <Spacer />
-      <Button variant="outline" colorScheme="green" onClick={onOpen}>
-        Add New{' '}
+      <Button variant="outline" colorScheme="green" onClick={setModalOpen}>
+        Add New
       </Button>
-      <AddProductModal isOpen={isOpen} onClose={onClose} />
     </HStack>
-  )
-}
-
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react'
-import AddProductForm from '../Forms/AddProduct'
-
-function AddProductModal({ isOpen, onClose }) {
-  return (
-    <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size="xl"
-        scrollBehavior="outside"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Product</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <AddProductForm closeModal={onClose} />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
   )
 }

@@ -39,15 +39,12 @@ export default function Notofications() {
 
   const topBids = res?.data?.data
 
-  console.log(topBids, 'TopBids')
-
   return (
     <>
       <Heading size="sm">Top Bids this weeks</Heading>
       <Stack pt="5" spacing="2" color="gray.600">
         {topBids.map((bid) => {
           let fromNow = dayjs(bid.createdAt).fromNow()
-          console.log(fromNow)
           return (
             <Box key={bid._id}>
               <HStack>
@@ -58,7 +55,7 @@ export default function Notofications() {
                 />
                 <Box flexGrow="1" ml="2">
                   {`${'Random User'} bidded Rs ${bid.amount} on ${
-                    bid?.product ? bid.product.name : ''
+                    bid.product ? bid.product.name : ''
                   }`}
                 </Box>
                 <Box color="gray.500">{fromNow}</Box>

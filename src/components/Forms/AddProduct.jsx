@@ -21,8 +21,9 @@ import ChipInput from 'material-ui-chip-input'
 
 import React, { useState } from 'react'
 import axios from 'axios'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { addProductMutation } from '../../utils/mutations'
+import { useSession } from 'next-auth/client'
 
 export default function AddProductForm({ closeModal }) {
   const { register, handleSubmit } = useForm()
@@ -54,8 +55,21 @@ export default function AddProductForm({ closeModal }) {
     if (closeModal) closeModal()
   }
 
+  const [session] = useSession()
+  const { data: res } = useQuery(
+    'user',
+    () =>
+      axios({
+        method: 'get',
+        url: `/api/users/profile/no?email=${session?.user?.email}`,
+      }),
+    { enabled: !!session?.user?.email, refetchOnWindowFocus: false }
+  )
+
+  const userId = res?.data?.data?._id
+
   const submitHandler = async (data) => {
-    let allData = { ...data, tag: tags, images }
+    let allData = { ...data, tag: tags, images, user: userId }
     console.log('data', allData)
     mutate(allData)
   }
@@ -136,7 +150,6 @@ export default function AddProductForm({ closeModal }) {
           minW="32"
           colorScheme="green"
           size="md"
-          disabled={!images[0]}
           isLoading={isLoading}
         >
           Create new Product

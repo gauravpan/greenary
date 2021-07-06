@@ -10,7 +10,7 @@ const List = [
 
 export default function NavBar({ navRef }) {
   const router = useRouter()
-  const active = router.asPath
+  const active = router.pathname
   const [sticky, setSticky] = useState(false)
 
   function makeNavSticky() {

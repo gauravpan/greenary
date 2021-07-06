@@ -1,20 +1,34 @@
-install rest client vs code extension to test apis in vs code.
- 1. use '###' to separate requests
- 2. have one line as divider to have body content
- 
 
-###
-GET http://localhost:3000/api/auth/session HTTP/1.1
-Authorization: Bearer token4uu98u98u98u98
+ 
+### Get products
+Get http://localhost:3000/api/product?limit=10&offset=10 HTTP/1.1
+
+### Post product
+Post http://localhost:3000/api/product HTTP/1.1
 
 {
-    "i am " : "JSON body"
+  "name": "Best Product",
+  "description":"This is the product description.",
+  "readyDate": "2018-05-10",
+  "expiryDate": "2022-05-10",
+  "basePrice": "5000",
+  "quantity": 10,
+  "unit": "kg",
+  "images": ["https://avatars0.githubusercontent.com/u/1500684?s=460&v=4"],
+  "tag": ["First"]
 }
 
+
+
 ###
-GET http://localhost:3000/api/auth/session HTTP/1.1
-Authorization: Bearer token4uu98u98u98u98
+Get http://localhost:3000/api/product/bid HTTP/1.1
+
+
+###
+POST http://localhost:3000/api/product/bid HTTP/1.1
 
 {
-    "i am " : "JSON body"
+  "product": "60e3f8978067da3638c642c4",
+  "title": "Product Bid Thus",
+  "amount": 500
 }

@@ -19,7 +19,7 @@ export default function Layout({ children }) {
       <Header />
       <Box ref={navRef} />
       <NavBar navRef={navRef} />
-      <Container maxW="container.lg" py="8">
+      <Container maxW="container.lg" pt="8">
         {children}
       </Container>
     </Box>

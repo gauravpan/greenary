@@ -9,17 +9,12 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        let { limit, skip } = req.query
-        Product.find({})
-          .sort({ createdAt: -1 })
-          .skip(parseInt(skip) || 0)
-          .limit(parseInt(limit) || 10)
-          .exec((error, products) => {
-            if (error) return res.send({ error })
-            res.status(200).json({ success: true, data: products })
-          }) /* find all the data in our database */
+        const products = await Product.find(
+          {}
+        ) /* find all the data in our database */
+        res.status(200).json({ success: true, data: products })
       } catch (error) {
-        res.status(400).json({ success: false, error })
+        res.status(400).json({ success: false })
       }
       break
     case 'POST':

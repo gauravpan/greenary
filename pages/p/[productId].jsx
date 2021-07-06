@@ -108,7 +108,7 @@ function BidCard() {
     } catch (error) {}
     if (res?.data?.success) {
       toast({
-        title: 'Product bided successfully.',
+        title: 'Product bid successfully.',
         status: 'success',
         duration: 5000,
         isClosable: true,

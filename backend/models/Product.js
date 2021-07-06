@@ -13,6 +13,10 @@ const ProductSchema = new mongoose.Schema(
       required: [true, 'Please provide the product description'],
       maxlength: [100, "Description cannot be more than 60 characters"],
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
     readyDate: {
       type: Date,
     },

@@ -37,13 +37,13 @@ export default function NavBar({ navRef }) {
             <Link href={href} passHref>
               <Box
                 as="a"
-                color={active == href ? 'gray.900' : 'gray.600'}
+                color={active == href ? 'green.500' : 'gray.500'}
                 cursor="pointer"
                 fontWeight="semibold"
                 py="2"
-                borderColor="black"
+                borderColor="green.400"
                 borderBottomWidth={active == href ? '2px' : '0'}
-                _hover={{ color: 'gray.900' }}
+                _hover={{ color: 'green.500' }}
                 bg="white"
               >
                 {name}

@@ -5,14 +5,21 @@ const Services = () => {
   const services = [
     {
       title: 'As a farmer, Sell your product.',
-      descripton: 'You can buy directly sell your products',
+      descripton: 'Sell your products through our platform without any hassles.',
       image:
         'https://5.imimg.com/data5/RF/JR/GLADMIN-34696552/plants-agriculture-500x500.jpg',
     },
     {
       title: 'Buy direct from the farmers',
       descripton:
-        'You can buy directly from farmers through contacting with them.',
+        'You can buy directly from farmers by bidding in the listed products.',
+      image:
+        'https://5.imimg.com/data5/RF/JR/GLADMIN-34696552/plants-agriculture-500x500.jpg',
+    },
+    {
+      title: 'Quality assured products',
+      descripton:
+        'Buy high quality products checked by professionals',
       image:
         'https://5.imimg.com/data5/RF/JR/GLADMIN-34696552/plants-agriculture-500x500.jpg',
     },

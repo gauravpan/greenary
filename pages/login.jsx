@@ -12,7 +12,8 @@ import {
   Link,
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import 
+import { FcGoogle } from 'react-icons/fc'
+import { signIn } from 'next-auth/client'
 
 Login.Layout = ({ children }) => <> {children} </>
 export default function Login() {
@@ -30,7 +31,7 @@ export default function Login() {
         >
           <NextLink href="/">
             {/* <Image cursor="pointer" boxSize="14" src="/betalogo.png" /> */}
-            <Heading>faceboss</Heading>
+            <Heading>Greenary</Heading>
           </NextLink>
           <Box
             flexGrow="1"
@@ -64,7 +65,20 @@ export default function Login() {
               Sign in to contine
             </Heading>
             <Box mt="10" p="10" bg="white" rounded="md" shadow="md">
-              <Button colorScheme="telegram">Continue with Google</Button>
+              <Button
+                colorScheme="telegram"
+                variant="outline"
+                textAlign="center"
+                w="full"
+                leftIcon={<FcGoogle />}
+                onClick={() => signIn('google', { callbackUrl: '/' })}
+                my="3"
+              >
+                Continue with Google
+              </Button>
+              <Box py="2" textAlign="center" w="full">
+                or
+              </Box>
               <form>
                 <FormControl id="email">
                   <FormLabel>Email address</FormLabel>
@@ -95,7 +109,9 @@ export default function Login() {
                       <Link>Create account</Link>
                     </Heading>
                   </Box>
-                  <Button colorScheme="green">Sign In</Button>
+                  <Button colorScheme="green" disabled>
+                    Sign In
+                  </Button>
                 </Box>
               </form>
             </Box>

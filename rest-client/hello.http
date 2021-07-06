@@ -1,7 +1,7 @@
 
  
 ### Get products
-Get http://localhost:3000/api/product?limit=10&offset=10 HTTP/1.1
+Get http://localhost:3000/api/product?limit=10&skip=0 HTTP/1.1
 
 ### Post product
 Post http://localhost:3000/api/product HTTP/1.1
@@ -15,7 +15,8 @@ Post http://localhost:3000/api/product HTTP/1.1
   "quantity": 10,
   "unit": "kg",
   "images": ["https://avatars0.githubusercontent.com/u/1500684?s=460&v=4"],
-  "tag": ["First"]
+  "tag": ["First"],
+  "user": "60e429574aff4402004075e0"
 }
 
 

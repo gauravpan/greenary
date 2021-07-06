@@ -2,7 +2,7 @@ import { Box, Heading, Stack } from '@chakra-ui/react'
 import AddProduct from './AddProduct'
 
 const topFood = {
-  name: 'Pizza',
+  name: 'Anjel',
   sales: 90,
 }
 const topFoods = Array(4).fill(topFood)
@@ -12,7 +12,7 @@ export default function TopProductsDisplay() {
     <>
       <AddProduct />
       <Heading size="sm" pt="6">
-        Top Products
+        Top Handsome people
       </Heading>
       <Stack spacing="6" pt="5" color="gray.600">
         {topFoods.map(({ name, sales }) => (

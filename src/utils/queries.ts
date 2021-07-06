@@ -7,3 +7,7 @@ export function getProduct({ queryKey }) {
 export function getProducts({ queryKey }) {
   return axios.get(`/api/product`)
 }
+
+export function getBids({ queryKey }) {
+  return axios.get(`/api/product`)
+}

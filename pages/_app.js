@@ -6,10 +6,13 @@ import {
   withDefaultColorScheme,
 } from '@chakra-ui/react'
 import MainLayout from '../src/components/Layouts/Main.Layout'
+import { QueryClientProvider, QueryClient } from 'react-query'
 
 const theme = extendTheme(withDefaultColorScheme('green'), {
   styles: { global: { body: { bg: 'gray.50' } } },
 })
+
+const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }) {
   const title = Component.title || 'Green Market'
@@ -22,11 +25,13 @@ function MyApp({ Component, pageProps }) {
         <meta name="description" content="Agro App" />
       </Head>
       <ChakraProvider theme={theme}>
-        <Provider session={pageProps.session}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+          <Provider session={pageProps.session}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Provider>
+        </QueryClientProvider>
       </ChakraProvider>
     </>
   )

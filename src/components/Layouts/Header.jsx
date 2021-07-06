@@ -22,7 +22,9 @@ export default function Header() {
         <Container maxW="container.lg">
           <HStack py="2" justifyContent="space-between">
             {/* <Image boxSize="12" src="/logo.jpg" /> */}
-            <Heading size="lg">Agro</Heading>
+            <Heading size="lg" letterSpacing="wider" color="green.500">
+              Greenary
+            </Heading>
             <Box ml="auto">
               <Menu placement="bottom-end">
                 <MenuButton>

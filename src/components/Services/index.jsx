@@ -38,7 +38,12 @@ const Services = () => {
         <Box
           key={index}
           d="flex"
-          flexDirection={['column', index % 2 === 0 ? 'row-reverse' : 'row']}
+          flexDirection={[
+            'column',
+            ,
+            'column',
+            index % 2 === 0 ? 'row-reverse' : 'row',
+          ]}
           gridGap="30px"
           alignItems="center"
           justifyContent="space-between"

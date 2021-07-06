@@ -15,6 +15,7 @@ import NextLink from 'next/link'
 import { FcGoogle } from 'react-icons/fc'
 import { signIn } from 'next-auth/client'
 
+Login.protectedRoute = 'NO'
 Login.Layout = ({ children }) => <> {children} </>
 export default function Login() {
   return (

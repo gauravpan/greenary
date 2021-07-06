@@ -5,9 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 
 const List = [
   { name: 'Home', href: '/' },
-  { name: 'Market', href: '/market' },
   { name: 'Explore', href: '/explore' },
-  { name: 'Settings', href: '/settings' },
 ]
 
 export default function NavBar({ navRef }) {

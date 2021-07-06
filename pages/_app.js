@@ -7,6 +7,7 @@ import {
 } from '@chakra-ui/react'
 import MainLayout from '../src/components/Layouts/Main.Layout'
 import { QueryClientProvider, QueryClient } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 const theme = extendTheme(withDefaultColorScheme('green'), {
   styles: { global: { body: { bg: 'gray.50' } } },
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }) {
         <QueryClientProvider client={queryClient}>
           <Provider session={pageProps.session}>
             <Layout>
+              <ReactQueryDevtools />
               <Component {...pageProps} />
             </Layout>
           </Provider>

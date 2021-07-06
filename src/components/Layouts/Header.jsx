@@ -35,7 +35,7 @@ export default function Header() {
                   <Avatar
                     name="Dan Abrahmov"
                     boxSize="8"
-                    src={session.user.image}
+                    src={session?.user?.image}
                   />
                 </MenuButton>
                 <MenuList shadow="lg">

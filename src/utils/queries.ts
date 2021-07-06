@@ -9,5 +9,9 @@ export function getProducts({ queryKey }) {
 }
 
 export function getBids({ queryKey }) {
-  return axios.get(`/api/product`)
+  return axios.get(`/api/product/bid`)
 }
+
+export function getTopBids({ queryKey }) {
+    return axios.get(`/api/product/bid/top`)
+  }

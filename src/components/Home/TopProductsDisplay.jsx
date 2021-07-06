@@ -49,8 +49,8 @@ export default function TopProductsDisplay() {
             expiryDate,
             _id,
           }) => {
-            readyDate = readyDate.substring(0, 10)
-            expiryDate = expiryDate.substring(0, 10)
+            readyDate = readyDate && readyDate.substring(0, 10)
+            expiryDate =expiryDate && expiryDate.substring(0, 10)
 
             return (
               <Link key={_id} href={`/p/${_id}`}>

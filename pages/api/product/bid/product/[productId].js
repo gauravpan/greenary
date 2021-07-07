@@ -1,6 +1,6 @@
-import dbConnect from '../../../../backend/utils/dbConnect'
-import Product from '../../../../backend/models/Product'
-import Bid from '../../../../backend/models/Bid'
+import dbConnect from '../../../../../backend/utils/dbConnect'
+import Product from '../../../../../backend/models/Product'
+import Bid from '../../../../../backend/models/Bid'
 import { ObjectId } from 'mongodb'
 
 export default async function handler(req, res) {
@@ -10,11 +10,14 @@ export default async function handler(req, res) {
 
   switch (method) {
     case 'GET':
+      let productId = req.query.productId;
+      console.log(productId, "ProductIdsssssss")
       try {
-        Bid.find({})
+        Bid.find({ product: ObjectId(productId) })
           .populate('user')
           .sort({ amount: 1 })
           .exec((error, bids) => {
+            console.log(error, bids)
             if (error) return res.send({ error, message: 'Error finding bids' })
             res.status(200).json({ success: true, data: bids })
           })

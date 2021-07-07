@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/dist/client/router'
 import { useMutation, useQuery } from 'react-query'
-import { getProduct, getUserBid, getBids } from '../../src/utils/queries'
+import { getProduct, getUserBid, getBids, getProductBids } from '../../src/utils/queries'
 
 import { FormControl, FormLabel } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
@@ -31,7 +31,7 @@ export default function Overview() {
   const { data: res, isLoading } = useQuery([productId], getProduct, {
     refetchOnWindowFocus: false,
   })
-  console.log(res)
+  console.log(res, session, 'Sessions')
   if (isLoading || !res)
     return (
       <Box mx="auto" py="12">
@@ -45,9 +45,9 @@ export default function Overview() {
     <>
       <Box d={{ base: 'block', md: 'flex' }} pt={{ base: '5', md: '12' }}>
         <Box w="full" pb="16" mr={{ base: '0', md: '10' }} px="1">
-          <Image src={product?.images[0]} w={"full"} rounded="md" />
+          <Image src={product?.images[0]} w={'full'} rounded="md" />
         </Box>
-        <Box  w="full">
+        <Box w="full">
           <Box>
             <Heading pb="4" size="sm">
               {product?.name}
@@ -72,25 +72,20 @@ export default function Overview() {
         <Heading size="sm">About This Product</Heading>
         <Box py="4"> {product?.description}</Box>
       </Box>
-      {session && <Bids session={session} />}
+      <Bids />
     </>
   )
 }
 
-function Bids({ session }) {
+function Bids({}) {
   const router = useRouter()
 
   const { productId } = router.query
-  const { data: res, isLoading } = useQuery(
-    [productId, session?.user?.id],
-    getBids,
-    {
-      refetchOnWindowFocus: false,
-      retry: true,
-    }
-  )
+  const { data: res, isLoading } = useQuery([productId, "userId"], getProductBids, {
+    refetchOnWindowFocus: false,
+  })
 
-  console.log(res, 'bids')
+  console.log(res?.data, 'Product bids from component')
 
   if (isLoading || !res)
     return (
@@ -99,28 +94,36 @@ function Bids({ session }) {
       </Box>
     )
 
+
+
   const bids = res?.data?.data
 
-  console.log(bids, 'Bids----------')
+  console.log(res?.data, "ProductBids from component")
 
   return (
-    <Box
-      display="flex"
-      flexDir="column"
-      minW={600}
-      maxW={600}
-      mb={3}
-    >
-      <Box display="flex" justifyContent="space-between" alignItems="flex-start">
-        <Heading size="sm" >Top Bids this weeks</Heading>
+    <Box display="flex" flexDir="column"  maxW={600} mb={3}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="flex-start"
+      >
+        <Heading size="sm">Bids</Heading>
       </Box>
       <Box display="flex" flexDirection="column">
         <Stack pt="5" spacing="2" color="gray.600">
-          {bids &&
+          {bids && Array.isArray(bids) && 
             bids.map((bid) => {
               let fromNow = dayjs(bid.createdAt).fromNow()
               return (
-                <Box key={bid._id} minW={400} maxW={600} bg="white" p="4" shadow="lg" rounded="lg">
+                <Box
+                  key={bid._id}
+                  minW={400}
+                  maxW={600}
+                  bg="white"
+                  p="4"
+                  shadow="lg"
+                  rounded="lg"
+                >
                   <HStack>
                     <Box
                       display="flex"

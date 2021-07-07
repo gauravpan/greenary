@@ -51,10 +51,10 @@ export default function Notofications() {
                 <Image
                   boxSize="8"
                   rounded="full"
-                  src="https://bit.ly/kent-c-dodds"
+                  src={bid?.user?.image || `https://bit.ly/kent-c-dodds`}
                 />
                 <Box flexGrow="1" ml="2">
-                  {`${'Random User'} bidded Rs ${bid.amount} on ${
+                  {`${ bid?.user?.name || 'Random User'} bidded Rs ${bid.amount} on ${
                     bid.product ? bid.product.name : ''
                   }`}
                 </Box>

@@ -24,12 +24,13 @@ export default async function handler(req, res) {
       break
     case 'POST':
       try {
-        Product.create(
-          req.body,(error,product) => {
-            if(error) return res.send({ error })
-            return res.status(201).json({ success: true, data: product, message: 'product created' })
-          }
-        )
+        let newProduct = new Product(req.body)
+        newProduct.save((error, bid) => {
+          if (error) return res.send({ error })
+          return res
+            .status(201)
+            .json({ success: true, data: newProduct, message: 'product created' })
+        })
       } catch (error) {
         res.status(400).json({ message: 'Error creating product', error })
       }

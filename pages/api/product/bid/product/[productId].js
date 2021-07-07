@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       try {
         Bid.find({ product: ObjectId(productId) })
           .populate('user')
-          .sort({ amount: 1 })
+          .sort({ "createdAt": -1  })
           .exec((error, bids) => {
             console.log(error, bids)
             if (error) return res.send({ error, message: 'Error finding bids' })

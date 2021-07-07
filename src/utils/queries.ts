@@ -17,7 +17,7 @@ export function getProductBids({ queryKey }) {
 }
 
 export function getTopBids({ queryKey }) {
-  return axios.get(`/api/product/bid/top`)
+  return axios.get(`/api/product/bid/top?top=${queryKey[0]}`)
 }
 
 export function getUserBid({ queryKey }) {

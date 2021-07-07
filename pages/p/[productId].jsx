@@ -8,12 +8,19 @@ import {
   Input,
   Stack,
   Divider,
+  Text,
   Textarea,
   useToast,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/dist/client/router'
 import { useMutation, useQuery } from 'react-query'
-import { getProduct, getUserBid, getBids, getProductBids } from '../../src/utils/queries'
+import {
+  getProduct,
+  getUserBid,
+  getBids,
+  getProductBids,
+} from '../../src/utils/queries'
+import { useState, useEffect } from 'react'
 
 import { FormControl, FormLabel } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
@@ -26,6 +33,7 @@ dayjs.extend(relativeTime)
 export default function Overview() {
   const router = useRouter()
   const [session] = useSession()
+  const [data, setData] = useState(1)
 
   const { productId } = router.query
   const { data: res, isLoading } = useQuery([productId], getProduct, {
@@ -40,48 +48,97 @@ export default function Overview() {
     )
 
   const product = res?.data?.data
+  let readyDate, expiryDate
+  if (product) {
+    readyDate = product?.readyDate && product?.readyDate.substring(0, 10)
+    expiryDate = product?.expiryDate && product?.expiryDate.substring(0, 10)
+  }
 
   return (
     <>
-      <Box d={{ base: 'block', md: 'flex' }} pt={{ base: '5', md: '12' }}>
-        <Box w="full" pb="16" mr={{ base: '0', md: '10' }} px="1">
+      <Box
+        bg="white"
+        p="4"
+        shadow="lg"
+        rounded="lg"
+        d={{ base: 'block', md: 'flex' }}
+        pt={{ base: '1', md: '5' }}
+        pb={0}
+        mb={{ base: '4', md: '10' }}
+      >
+        <Box w="full" pb="7" mr={{ base: '0', md: '50' }} px="1">
           <Image src={product?.images[0]} w={'full'} rounded="md" />
         </Box>
         <Box w="full">
           <Box>
-            <Heading pb="4" size="sm">
+            <Heading pb="3" fontSize="28px" size="sm">
               {product?.name}
             </Heading>
+            <Box pt="3" pb="2">
+              {' '}
+              {product?.description}
+            </Box>
+
             <Box>
-              <HStack>
-                <Box w="32">Base Price</Box> <Box>Rs. {product?.basePrice}</Box>
-              </HStack>
-              <HStack>
-                <Box w="32">Quantity</Box>
-                <Box>
+              <HStack py={1}>
+                <Box w="32" fontWeight="600">
+                  Quantity
+                </Box>
+                <Box fontWeight="600" fontSize="18px" color="gray.800">
                   {product?.quantity} {product?.unit}
                 </Box>
               </HStack>
+              <HStack py={1}>
+                <Box w="32" fontWeight="600">
+                  Ready Date
+                </Box>
+                <Box fontWeight="600" color="gray.800">
+                  Rs. {readyDate}
+                </Box>
+              </HStack>
+              <HStack py={1}>
+                <Box w="32" fontWeight="600">
+                  Expiry Date
+                </Box>
+                <Box fontWeight="600" color="gray.800">
+                  {expiryDate}
+                </Box>
+              </HStack>
+              <HStack py={1}>
+                <Box w="32" fontWeight="600">
+                  Base Price
+                </Box>
+                <Box fontWeight="600" fontSize="22px" color="gray.800">
+                  {product?.basePrice}
+                </Box>
+              </HStack>
             </Box>
-
-            <BidCard />
           </Box>
         </Box>
       </Box>
-      <Box py="12">
-        <Heading size="sm">About This Product</Heading>
-        <Box py="4"> {product?.description}</Box>
+
+      <Box
+        display="flex"
+        flexDirection={{ base: 'column', md: 'row' }}
+        gridGap="10"
+        pt={4}
+      >
+        <Box flex={1}>
+          <Bids data={data} />
+        </Box>
+        <Box flex={1} pb={5}>
+          <BidCard setData={setData} />
+        </Box>
       </Box>
-      <Bids />
     </>
   )
 }
 
-function Bids({}) {
+function Bids({ data }) {
   const router = useRouter()
 
   const { productId } = router.query
-  const { data: res, isLoading } = useQuery([productId, "userId"], getProductBids, {
+  const { data: res, isLoading } = useQuery([productId, data], getProductBids, {
     refetchOnWindowFocus: false,
   })
 
@@ -94,31 +151,28 @@ function Bids({}) {
       </Box>
     )
 
-
-
   const bids = res?.data?.data
 
-  console.log(res?.data, "ProductBids from component")
+  console.log(res?.data, 'ProductBids from component')
 
   return (
-    <Box display="flex" flexDir="column"  maxW={600} mb={3}>
+    <Box display="flex" flexDir="column" maxW={600} mb={3}>
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="flex-start"
       >
-        <Heading size="sm">Bids</Heading>
+        <Heading size="md">Bids</Heading>
       </Box>
       <Box display="flex" flexDirection="column">
         <Stack pt="5" spacing="2" color="gray.600">
-          {bids && Array.isArray(bids) && 
+          {bids &&
+            Array.isArray(bids) &&
             bids.map((bid) => {
               let fromNow = dayjs(bid.createdAt).fromNow()
               return (
                 <Box
                   key={bid._id}
-                  minW={400}
-                  maxW={600}
                   bg="white"
                   p="4"
                   shadow="lg"
@@ -181,7 +235,7 @@ function Bids({}) {
 import { addBidMutation } from '../../src/utils/mutations'
 import axios from 'axios'
 
-function BidCard() {
+function BidCard({ setData }) {
   const { mutateAsync, isLoading, isError, data } = useMutation(addBidMutation)
   const toast = useToast()
 
@@ -210,16 +264,22 @@ function BidCard() {
   const router = useRouter()
   const { productId } = router.query
 
+  console.log(userId, Boolean(userId), 'UserId')
+
   const { data: userBid, isLoading: userBidLoading } = useQuery(
     [productId, userId],
     getUserBid,
     {
       refetchOnWindowFocus: false,
+      enabled: Boolean(userId),
     }
   )
 
-  console.log(userBid)
-  const { handleSubmit, register } = useForm()
+  console.log(userBid, 'User Biddddd')
+  let uBidError = userBid?.data?.error
+  let uBid = userBid?.data?.bid
+  console.log(uBid, uBidError, 'uBid', 'UBiderror')
+  const { handleSubmit, register, reset } = useForm(uBid)
 
   async function submitHandler(data) {
     console.log({ data })
@@ -238,6 +298,7 @@ function BidCard() {
         position: 'top',
       })
     } else if (res?.data?.success) {
+      setData((d) => d + 1)
       toast({
         title: 'Product bid successfully.',
         status: 'success',
@@ -248,44 +309,56 @@ function BidCard() {
     }
   }
 
+  useEffect(() => {
+    reset(uBid)
+  }, [uBid])
+
   return (
-    <form onSubmit={handleSubmit(submitHandler)}>
-      <Box py="6" my="3" bg="white" p="2" rounded="md" shadow="sm">
-        <FormControl id="amount">
-          <FormLabel>Amount</FormLabel>
-          <Input
-            placeholder="Rs."
-            type="number"
-            name="amount"
-            {...register('amount', { required: true })}
-          />
-        </FormControl>
-        <FormControl id="title">
-          <FormLabel>Bid Title</FormLabel>
-          <Input
-            placeholder="About this bid"
-            {...register('title', { required: true })}
-          />
-        </FormControl>
-        <FormControl id="description">
-          <FormLabel>Description</FormLabel>
-          <Textarea
-            placeholder="Description..."
-            {...register('description', { required: true })}
-          />
-        </FormControl>
-        <HStack d="flex" pt="3">
-          <Button
-            type="submit"
-            colorScheme="green"
-            minW="24"
-            my="2"
-            isLoading={isLoading}
-          >
-            Bid
-          </Button>
-        </HStack>
-      </Box>
-    </form>
+    <Box>
+      <Text color="gray.800" fontSize="20px" fontWeight="600">
+        {uBid ? 'Update' : 'Add'} Bids
+      </Text>
+
+      {uBid && <Text color="gray.700">User have already added bid</Text>}
+
+      <form onSubmit={handleSubmit(submitHandler)}>
+        <Box py="6" my="3" bg="white" p="2" rounded="md" shadow="sm">
+          <FormControl id="amount">
+            <FormLabel>Amount</FormLabel>
+            <Input
+              placeholder="Rs."
+              type="number"
+              name="amount"
+              {...register('amount', { required: true })}
+            />
+          </FormControl>
+          <FormControl id="title">
+            <FormLabel>Bid Title</FormLabel>
+            <Input
+              placeholder="About this bid"
+              {...register('title', { required: true })}
+            />
+          </FormControl>
+          <FormControl id="description">
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              placeholder="Description..."
+              {...register('description', { required: true })}
+            />
+          </FormControl>
+          <HStack d="flex" pt="3">
+            <Button
+              type="submit"
+              colorScheme="green"
+              minW="24"
+              my="2"
+              isLoading={isLoading}
+            >
+              {uBid ? 'Update Bid' : 'Bid'}
+            </Button>
+          </HStack>
+        </Box>
+      </form>
+    </Box>
   )
 }

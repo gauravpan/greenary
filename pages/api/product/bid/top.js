@@ -11,11 +11,10 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         Bid.find({})
-          .populate('user')
           .populate('product')
           .sort({ amount: 1 })
           .exec((error, bids) => {
-            if (error) return res.send({ error })
+            if (error) return res.send({ error, messge: 'Error find bids' })
             res.status(200).json({ success: true, data: bids })
           })
       } catch (error) {

@@ -12,7 +12,7 @@ export default function Stats() {
     <StatGroup>
       <Stat>
         <StatLabel>Total Views (this week)</StatLabel>
-        <StatNumber>45,670</StatNumber>
+        <StatNumber>120</StatNumber>
         <StatHelpText>
           <StatArrow type="increase" />
           23.36%
@@ -21,7 +21,7 @@ export default function Stats() {
 
       <Stat>
         <StatLabel>Total Bids (this week)</StatLabel>
-        <StatNumber>45</StatNumber>
+        <StatNumber>10</StatNumber>
         <StatHelpText>
           <StatArrow type="decrease" />
           9.05%

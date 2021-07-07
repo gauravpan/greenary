@@ -32,7 +32,7 @@ export default function NavBar({ navRef }) {
       <Container maxW="container.lg">
         <HStack as="nav" spacing="6" bg="white">
           {List.map(({ name, href }) => (
-            <Link href={href} passHref>
+            <Link key={href} href={href} passHref>
               <Box
                 as="a"
                 color={active == href ? 'green.500' : 'gray.500'}

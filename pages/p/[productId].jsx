@@ -6,18 +6,27 @@ import {
   HStack,
   Image,
   Input,
+  Stack,
+  Divider,
   Textarea,
   useToast,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/dist/client/router'
 import { useMutation, useQuery } from 'react-query'
-import { getProduct, getUserBid } from '../../src/utils/queries'
+import { getProduct, getUserBid, getBids } from '../../src/utils/queries'
 
 import { FormControl, FormLabel } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { useSession } from 'next-auth/client'
+
+dayjs.extend(relativeTime)
 
 export default function Overview() {
   const router = useRouter()
+  const [session] = useSession()
+
   const { productId } = router.query
   const { data: res, isLoading } = useQuery([productId], getProduct, {
     refetchOnWindowFocus: false,
@@ -35,10 +44,10 @@ export default function Overview() {
   return (
     <>
       <Box d={{ base: 'block', md: 'flex' }} pt={{ base: '5', md: '12' }}>
-        <Box w="sm" pb="16" px="4">
-          <Image src={product?.images[0]} rounded="md" />
+        <Box w="full" pb="16" mr={{ base: '0', md: '10' }} px="1">
+          <Image src={product?.images[0]} w={"full"} rounded="md" />
         </Box>
-        <Box ml={{ base: '0', md: '24' }} w="sm">
+        <Box  w="full">
           <Box>
             <Heading pb="4" size="sm">
               {product?.name}
@@ -48,7 +57,7 @@ export default function Overview() {
                 <Box w="32">Base Price</Box> <Box>Rs. {product?.basePrice}</Box>
               </HStack>
               <HStack>
-                <Box w="32">Quantity</Box>{' '}
+                <Box w="32">Quantity</Box>
                 <Box>
                   {product?.quantity} {product?.unit}
                 </Box>
@@ -63,18 +72,115 @@ export default function Overview() {
         <Heading size="sm">About This Product</Heading>
         <Box py="4"> {product?.description}</Box>
       </Box>
+      {session && <Bids session={session} />}
     </>
   )
 }
 
+function Bids({ session }) {
+  const router = useRouter()
+
+  const { productId } = router.query
+  const { data: res, isLoading } = useQuery(
+    [productId, session?.user?.id],
+    getBids,
+    {
+      refetchOnWindowFocus: false,
+      retry: true,
+    }
+  )
+
+  console.log(res, 'bids')
+
+  if (isLoading || !res)
+    return (
+      <Box mx="auto" py="12">
+        <Spinner />
+      </Box>
+    )
+
+  const bids = res?.data?.data
+
+  console.log(bids, 'Bids----------')
+
+  return (
+    <Box
+      display="flex"
+      flexDir="column"
+      minW={600}
+      maxW={600}
+      mb={3}
+    >
+      <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+        <Heading size="sm" >Top Bids this weeks</Heading>
+      </Box>
+      <Box display="flex" flexDirection="column">
+        <Stack pt="5" spacing="2" color="gray.600">
+          {bids &&
+            bids.map((bid) => {
+              let fromNow = dayjs(bid.createdAt).fromNow()
+              return (
+                <Box key={bid._id} minW={400} maxW={600} bg="white" p="4" shadow="lg" rounded="lg">
+                  <HStack>
+                    <Box
+                      display="flex"
+                      flexDirection="row"
+                      justifyContent="space-between"
+                      mb={2}
+                      w={'100%'}
+                    >
+                      <Box
+                        fontWeight={600}
+                        fontSize={'18px'}
+                        color={'gray.800'}
+                      >
+                        {bid?.title || 'Bid Title'}
+                      </Box>
+                      {/* {`${bid.user.name} bidded Rs ${bid.amount} on ${
+                        bid.product ? bid.product.name : ''
+                      }`} */}
+                      <Box fontWeight={600} fontSize={'24px'} color="gray.800">
+                        Rs {bid.amount}
+                      </Box>
+                    </Box>
+
+                    {/* <Box color="gray.500">{fromNow}</Box> */}
+                  </HStack>
+                  <Box mb={2}>{bid?.description}</Box>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Box display="flex" alignItems="center">
+                      <Image
+                        boxSize="8"
+                        rounded="full"
+                        src={
+                          `${bid.user.image}` || `https://bit.ly/kent-c-dodds`
+                        }
+                      />
+                      <Box fontWeight={600} color={'black'} ml={2}>
+                        {bid?.user?.name}
+                      </Box>
+                    </Box>
+                    <Box>{fromNow}</Box>
+                  </Box>
+                </Box>
+              )
+            })}
+        </Stack>
+      </Box>
+    </Box>
+  )
+}
+
 import { addBidMutation } from '../../src/utils/mutations'
-import { useSession } from 'next-auth/client'
 import axios from 'axios'
 
 function BidCard() {
   const { mutateAsync, isLoading, isError, data } = useMutation(addBidMutation)
   const toast = useToast()
-
 
   if (isError) {
     toast({
@@ -101,11 +207,15 @@ function BidCard() {
   const router = useRouter()
   const { productId } = router.query
 
-  const { data: userBid, isLoading: userBidLoading } = useQuery([productId, userId], getUserBid , {
-    refetchOnWindowFocus: false,
-  })
+  const { data: userBid, isLoading: userBidLoading } = useQuery(
+    [productId, userId],
+    getUserBid,
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
 
-  console.log(userBid);
+  console.log(userBid)
   const { handleSubmit, register } = useForm()
 
   async function submitHandler(data) {

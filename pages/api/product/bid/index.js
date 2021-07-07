@@ -12,6 +12,7 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         Bid.find({})
+          .populate('user')
           .sort({ amount: 1 })
           .exec((error, bids) => {
             if (error) return res.send({ error })
@@ -26,24 +27,25 @@ export default async function handler(req, res) {
         console.log(req.body)
         if (!req.body.user) return res.send({ error: 'UserId missing' })
         if (!req.body.product) return res.send({ error: 'Product missing' })
-        Bid.findOne({ user: ObjectId(req.body.user), product: ObjectId(req.body.product) }).exec(
-          async (error, bid) => {
-            console.log(error, bid)
-            if (error) return res.send({ error })
-            if (bid) {
-              res
-                .status(201)
-                .json({ error: 'User have created bid already', bid: bid })
-            } else {
-              console.log('Should create Now')
-              let newBid = new Bid(req.body)
-              newBid.save((error, bid) => {
-                if (error) return res.send({ error })
-                return res.status(201).json({ success: true, data: bid })
-              })
-            }
+        Bid.findOne({
+          user: ObjectId(req.body.user),
+          product: ObjectId(req.body.product),
+        }).exec(async (error, bid) => {
+          console.log(error, bid)
+          if (error) return res.send({ error })
+          if (bid) {
+            res
+              .status(201)
+              .json({ error: 'User have created bid already', bid: bid })
+          } else {
+            console.log('Should create Now')
+            let newBid = new Bid(req.body)
+            newBid.save((error, bid) => {
+              if (error) return res.send({ error })
+              return res.status(201).json({ success: true, data: bid })
+            })
           }
-        )
+        })
       } catch (error) {
         res.status(400).json({ message: 'Error Creating Bid ', error })
       }

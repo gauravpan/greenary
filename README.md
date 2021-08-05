@@ -1,2 +1,3 @@
-# MongoDB and Mongoose with Next.js
 # Greenary
+
+This is a one day hackathon project by team green.
